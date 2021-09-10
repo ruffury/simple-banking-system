@@ -4,13 +4,13 @@ from personal_cabinet import PersonalCabinet
 
 
 class StartMenu:
-    account_numbers = list()
-
-    menu_options = {
-        1: 'Create an account',
-        2: 'Log into account',
-        0: 'Exit'
-    }
+    def __init__(self):
+        self.account_numbers = list()
+        self.menu_options = {
+            1: 'Create an account',
+            2: 'Log into account',
+            0: 'Exit'
+        }
 
     def print_menu(self):
         for key in self.menu_options.keys():
@@ -43,6 +43,7 @@ class StartMenu:
         else:
             print('Wrong card number or PIN!')
 
-    def option3(self):
+    @staticmethod
+    def option3():
         print('Bye')
         exit()

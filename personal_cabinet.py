@@ -1,12 +1,11 @@
 class PersonalCabinet:
     def __init__(self):
         self.balance = 0
-
-    menu_options = {
-        1: 'Balance',
-        2: 'Log out',
-        0: 'Exit'
-    }
+        self.menu_options = {
+            1: 'Balance',
+            2: 'Log out',
+            0: 'Exit'
+        }
 
     # todo think about duplicated code
     def print_menu(self):

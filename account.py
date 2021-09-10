@@ -8,12 +8,13 @@ class Account:
         self.__checksum = str(random.randint(0, 9))
         self.__card_number = self.__bin + self.__account_number + self.__checksum
         self.__pin = ''.join([str(random.randint(0, 9)) for _ in range(4)])
-
-    def get_card_number(self):
-        return self.__card_number
+        self.__balance = 0
 
     def get_card_number(self):
         return self.__card_number
 
     def get_pin(self):
         return self.__pin
+
+    def get_balance(self):
+        return self.__balance
