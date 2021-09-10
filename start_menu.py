@@ -1,4 +1,6 @@
 from account import Account
+from login import Login
+from personal_cabinet import PersonalCabinet
 
 
 class StartMenu:
@@ -16,7 +18,7 @@ class StartMenu:
 
     def option1(self):
         new_card = Account()
-        self.account_numbers.append(new_card.get_cheksum())
+        self.account_numbers.append({new_card.get_card_number(): new_card.get_pin()})
         print('Your card has been created')
         print('Your card number:')
         print(new_card.get_card_number())
@@ -24,7 +26,23 @@ class StartMenu:
         print(new_card.get_pin())
 
     def option2(self):
-        pass
+        log = Login()
+        if log.check_creds(accounts=self.account_numbers):
+            print('You have successfully logged in!')
+            personal_cabinet = PersonalCabinet()
+            while True:
+                personal_cabinet.print_menu()
+                option = int(input())
+                if option == 1:
+                    personal_cabinet.option1()
+                elif option == 2:
+                    personal_cabinet.option2()
+                    return
+                else:
+                    personal_cabinet.option3()
+        else:
+            print('Wrong card number or PIN!')
 
     def option3(self):
-        pass
+        print('Bye')
+        exit()

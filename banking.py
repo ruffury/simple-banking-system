@@ -8,5 +8,7 @@ if __name__ == '__main__':
         option = int(input())
         if option == 1:
             menu.option1()
+        elif option == 2:
+            menu.option2()
         else:
             exit()
