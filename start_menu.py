@@ -2,6 +2,20 @@ from account import Account
 from login import Login
 from personal_cabinet import PersonalCabinet
 
+import sqlite3
+
+conn = sqlite3.connect('card.s3db')
+cur = conn.cursor()
+
+cur.execute("""CREATE TABLE IF NOT EXISTS card 
+(
+    id INTEGER,
+    "number" TEXT,
+    pin TEXT,
+    balance INTEGER DEFAULT 0
+);""")
+conn.commit()
+
 
 class StartMenu:
     def __init__(self):
@@ -18,6 +32,18 @@ class StartMenu:
 
     def option1(self):
         new_card = Account()
+
+        # find last id in db
+        cur.execute('select COALESCE(max(id), 0) + 1 from card')
+        last_id = cur.fetchone()[0]
+
+        # insert new account in db
+        cur.execute(f"""
+            INSERT INTO card
+            (id, "number", pin, balance)
+            VALUES({last_id}, {new_card.get_card_number()}, {new_card.get_pin()}, {new_card.get_balance()});
+                     """)
+        conn.commit()
         self.account_numbers.append({new_card.get_card_number(): new_card.get_pin()})
         print('Your card has been created')
         print('Your card number:')
