@@ -5,8 +5,8 @@ while True:
     menu.print_menu()
     option = input()
     if option == '1':
-        menu.option1()
+        menu.create_account()
     elif option == '2':
-        menu.option2()
+        menu.log_into_account()
     else:
         exit()

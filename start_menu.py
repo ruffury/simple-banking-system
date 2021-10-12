@@ -7,19 +7,18 @@ import sqlite3
 conn = sqlite3.connect('card.s3db')
 cur = conn.cursor()
 
-cur.execute("""CREATE TABLE IF NOT EXISTS card 
-(
-    id INTEGER,
-    "number" TEXT,
-    pin TEXT,
-    balance INTEGER DEFAULT 0
-);""")
-conn.commit()
+#cur.execute("""CREATE TABLE IF NOT EXISTS card
+#(
+#    id INTEGER,
+#    "number" TEXT,
+#    pin TEXT,
+#    balance INTEGER DEFAULT 0
+#);""")
+#conn.commit()
 
 
 class StartMenu:
     def __init__(self):
-        self.account_numbers = list()
         self.menu_options = {
             1: 'Create an account',
             2: 'Log into account',
@@ -30,7 +29,8 @@ class StartMenu:
         for key in self.menu_options.keys():
             print(f'{key}. {self.menu_options[key]}')
 
-    def option1(self):
+    @staticmethod
+    def create_account():
         new_card = Account()
 
         # find last id in db
@@ -44,32 +44,38 @@ class StartMenu:
             VALUES({last_id}, {new_card.get_card_number()}, {new_card.get_pin()}, {new_card.get_balance()});
                      """)
         conn.commit()
-        self.account_numbers.append({new_card.get_card_number(): new_card.get_pin()})
         print('Your card has been created')
         print('Your card number:')
         print(new_card.get_card_number())
         print('Your card PIN:')
         print(new_card.get_pin())
 
-    def option2(self):
+    @staticmethod
+    def log_into_account():
         log = Login()
-        if log.check_creds(accounts=self.account_numbers):
+        checking = log.check_creds()
+        if checking:
             print('You have successfully logged in!')
-            personal_cabinet = PersonalCabinet()
+            personal_cabinet = PersonalCabinet(card_id=checking[0])
             while True:
                 personal_cabinet.print_menu()
                 option = int(input())
                 if option == 1:
-                    personal_cabinet.option1()
+                    personal_cabinet.get_balance()
                 elif option == 2:
-                    personal_cabinet.option2()
-                    return
+                    personal_cabinet.add_income()
+                elif option == 3:
+                    personal_cabinet.do_transfer()
+                elif option == 4:
+                    personal_cabinet.close_account()
+                elif option == 5:
+                    personal_cabinet.log_out()
                 else:
-                    personal_cabinet.option3()
+                    personal_cabinet.exit()
         else:
             print('Wrong card number or PIN!')
 
     @staticmethod
-    def option3():
+    def exit():
         print('Bye')
         exit()
